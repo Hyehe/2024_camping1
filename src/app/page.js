@@ -1,22 +1,14 @@
+// src/app/page.js
 'use client';
 
-import { Box, Grid, Paper, Typography } from '@mui/material';
-import Link from 'next/link';
+import { Box, Typography, Link } from '@mui/material';
 
 export default function Home() {
   return (
-    <Box
-      sx={{
-        textAlign: 'center',
-        padding: '20px',
-        paddingTop: '80px', // 헤더 높이만큼 여백
-        paddingBottom: '60px', // 푸터 높이만큼 여백
-      }}
-    >
-      {/* 배너 이미지 */}
+    <Box sx={{ textAlign: 'center', padding: '20px' }}>
       <Box
         component="img"
-        src="/images/yellowsb.gif"
+        src="/images/car1.jpg"
         alt="배너"
         sx={{
           width: '100%',
@@ -26,112 +18,29 @@ export default function Home() {
         }}
       />
       <Typography variant="h4" gutterBottom>
+        캠핑에 오신 것을 환영합니다!
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        캠핑과 함께 다양한 모임에 참여해 보세요.
+      </Typography>
+      <Link
+        href="/MeetingGroup/meeting"
+        sx={{
+          display: 'inline-block',
+          marginTop: '20px',
+          padding: '10px 20px',
+          backgroundColor: '#FF914D',
+          color: 'white',
+          textDecoration: 'none',
+          borderRadius: '5px',
+          fontSize: '16px',
+          '&:hover': {
+            backgroundColor: '#FFB04A',
+          },
+        }}
+      >
         함께해요
-      </Typography>
-      <Typography variant="body1" sx={{ marginBottom: '20px' }}>
-        아래 버튼을 클릭해 다양한 모임에 참여하세요.
-      </Typography>
-      {/* 버튼 그룹 */}
-      <Grid container spacing={5} justifyContent="center" sx={{ marginTop: '40px' }}>
-        {/* 정규 모임 */}
-        <Grid item>
-          <Link href="/MeetingGroup/regular-Meeting" passHref style={{ textDecoration: 'none' }}>
-            <Paper
-              elevation={3}
-              sx={{
-                backgroundColor: '#FFFAE6',
-                borderRadius: '10px',
-                height: '300px',
-                width: '230px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-                transition: 'background-color 0.3s',
-                '&:hover': {
-                  backgroundColor: '#FFE5B4',
-                },
-              }}
-            >
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: 'bold',
-                  textDecoration: 'none',
-                  color: 'inherit', // 기본 링크 색상 유지
-                }}
-              >
-                정규 모임
-              </Typography>
-            </Paper>
-          </Link>
-        </Grid>
-        {/* 번개 모임 */}
-        <Grid item>
-          <Link href="/MeetingGroup/lightning-Meeting" passHref style={{ textDecoration: 'none' }}>
-            <Paper
-              elevation={3}
-              sx={{
-                backgroundColor: '#FFFAE6',
-                borderRadius: '10px',
-                height: '300px',
-                width: '230px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-                transition: 'background-color 0.3s',
-                '&:hover': {
-                  backgroundColor: '#FFE5B4',
-                },
-              }}
-            >
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: 'bold',
-                  textDecoration: 'none',
-                  color: 'inherit',
-                }}
-              >
-                번개 모임
-              </Typography>
-            </Paper>
-          </Link>
-        </Grid>
-        {/* 내 모임 */}
-        <Grid item>
-          <Link href="/MeetingGroup/my-Meeting" passHref style={{ textDecoration: 'none' }}>
-            <Paper
-              elevation={3}
-              sx={{
-                backgroundColor: '#FFFAE6',
-                borderRadius: '10px',
-                height: '300px',
-                width: '230px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-                transition: 'background-color 0.3s',
-                '&:hover': {
-                  backgroundColor: '#FFE5B4',
-                },
-              }}
-            >
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: 'bold',
-                  textDecoration: 'none',
-                  color: 'inherit',
-                }}
-              >
-                내 모임
-              </Typography>
-            </Paper>
-          </Link>
-        </Grid>
-      </Grid>
+      </Link>
     </Box>
-  )}
+  );
+}
