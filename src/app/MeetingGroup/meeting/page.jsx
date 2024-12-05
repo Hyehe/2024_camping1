@@ -9,7 +9,7 @@ export default function Home() {
       sx={{
         textAlign: 'center',
         padding: '20px',
-        paddingTop: '80px', // 헤더 높이만큼 여백
+        // paddingTop: '0px', // 헤더 높이만큼 여백
         paddingBottom: '60px', // 푸터 높이만큼 여백
       }}
     >

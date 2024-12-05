@@ -119,9 +119,11 @@ const Header = () => {
             }}
           >
             <ForestIcon sx={{ fontSize: 40, color: "#597445", mr: 1 }} />
+            <Link href="/" sx={{ textDecoration: "none"}}>
             <Typography variant="h5" sx={{ color: "#597445", fontWeight: "bold" }}>
               경빈이네 캠핑
             </Typography>
+            </Link>
           </Box>
 
           {/* 검색창 */}
@@ -217,6 +219,7 @@ const Header = () => {
           onMouseEnter={handleMouseEnter} // 하나라도 마우스를 올리면 모든 하위 메뉴 표시
           onMouseLeave={handleMouseLeave} // 마우스가 떨어지면 모든 하위 메뉴 닫기
         >
+          <Link href="/MeetingGroup/meeting" sx={{ textDecoration: "none"}}>
           <Button
             sx={{
               color: "black",
@@ -228,21 +231,19 @@ const Header = () => {
           >
             함께해요
           </Button>
+            </Link>
           {openAllMenus && (
             <Box sx={{ display: "flex", flexDirection: "column", 
               padding: "10px" , textAlign: "center", 
               justifyContent: "center", alignItems: "center", paddingTop: "30px"}}>
-              <Link href="/" sx={{ textDecoration: "none"}}>
-                <MenuItem sx={{color: "#3C3D37", fontSize: "0.9rem"}}>모임 찾기</MenuItem>
-              </Link>
               <Link href="/MeetingGroup/regular-Meeting" sx={{ textDecoration: "none"}}>
-                <MenuItem sx={{color: "#3C3D37", fontSize: "0.9rem"}}>모임 생성</MenuItem>
-              </Link>
-              <Link href="/MeetingGroup/meeting" sx={{ textDecoration: "none"}}>
-                <MenuItem sx={{color: "#3C3D37", fontSize: "0.9rem"}}>나의 모임</MenuItem>
+                <MenuItem sx={{color: "#3C3D37", fontSize: "0.9rem"}}>정규 모임</MenuItem>
               </Link>
               <Link href="/MeetingGroup/lightning-Meeting" sx={{ textDecoration: "none"}}>
                 <MenuItem sx={{color: "#3C3D37", fontSize: "0.9rem"}}>번개 모임</MenuItem>
+              </Link>
+              <Link href="/MeetingGroup/my-Meeting" sx={{ textDecoration: "none"}}>
+                <MenuItem sx={{color: "#3C3D37", fontSize: "0.9rem"}}>내 모임</MenuItem>
               </Link>
             </Box>
           )}
