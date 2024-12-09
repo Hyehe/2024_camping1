@@ -363,14 +363,22 @@ export default function CreateMeetingPage() {
           href="/MeetingGroup/regular-Meeting"
         >
           작성
-        </Button>
+        </Button><span />
         <Button
           variant="outlined"
-          color="secondary"
+          sx={{
+            color: 'green', // 텍스트 색상
+            borderColor: 'green', // 테두리 색상
+            '&:hover': {
+              borderColor: 'darkgreen', // 호버 시 테두리 색상
+              backgroundColor: 'rgba(0, 128, 0, 0.1)', // 호버 시 배경색
+            },
+          }}
           href="/MeetingGroup/regular-Meeting"
         >
           취소
         </Button>
+
       </Box>
     </Box>
   );

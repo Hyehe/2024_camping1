@@ -1,13 +1,20 @@
 'use client';
 
-import { Box, Typography, TextField, IconButton, Chip, Grid, Paper, Avatar, Fab } from '@mui/material';
+import {
+  Box, Typography, TextField, IconButton, Chip, Grid, Paper, Avatar, Fab, Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const meetings = [
   {
@@ -87,6 +94,12 @@ export default function RegularMeetingPage() {
   const [tagPage, setTagPage] = useState(0);
   const router = useRouter();
 
+  const [searchHistory, setSearchHistory] = useState({});
+  const [topSearches, setTopSearches] = useState([]);
+  const [currentRank, setCurrentRank] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+
   const handleCardClick = (id) => {
     router.push(`/MeetingGroup/detail/${id}`);
   };
@@ -104,7 +117,10 @@ export default function RegularMeetingPage() {
   };
 
   const handleSearch = () => {
+    if (!searchTerm.trim()) return;
+
     const lowerSearchTerm = searchTerm.toLowerCase();
+
     setFilteredMeetings(
       meetings.filter(
         (meeting) =>
@@ -115,7 +131,24 @@ export default function RegularMeetingPage() {
           meeting.tags.some((tag) => tag.toLowerCase().includes(lowerSearchTerm))
       )
     );
+
+    // 검색어 기록 추가 및 저장
+    const updatedSearchHistory = { ...searchHistory };
+    updatedSearchHistory[searchTerm] = (updatedSearchHistory[searchTerm] || 0) + 1;
+    setSearchHistory(updatedSearchHistory);
+    localStorage.setItem('searchHistory', JSON.stringify(updatedSearchHistory)); // 로컬스토리지 저장
+    updateTopSearches(updatedSearchHistory);
   };
+
+  // 검색어 추가 함수
+  // const addSearchTerm = (term) => {
+  //   const updatedSearchHistory = { ...searchHistory };
+  //   updatedSearchHistory[term] = (updatedSearchHistory[term] || 0) + 1;
+
+  //   setSearchHistory(updatedSearchHistory);
+  //   localStorage.setItem('searchHistory', JSON.stringify(updatedSearchHistory)); // 로컬스토리지 저장
+  //   updateTopSearches(updatedSearchHistory);
+  // };
 
   const handleTagPagination = (direction) => {
     setTagPage((prevPage) => {
@@ -132,22 +165,70 @@ export default function RegularMeetingPage() {
     });
   };
 
-
   const visibleTags = tags.slice(tagPage * 7, (tagPage + 1) * 7);
+
+  // 실시간 검색 기능
+
+  // 로컬스토리지에서 검색 기록 로드
+  useEffect(() => {
+    const savedSearchHistory = JSON.parse(localStorage.getItem('searchHistory')) || {};
+    setSearchHistory(savedSearchHistory);
+    updateTopSearches(savedSearchHistory);
+  }, []);
+
+
+  const handleSearchFromList = (term) => {
+    setSearchTerm(term);
+    setFilteredMeetings(
+      meetings.filter(
+        (meeting) =>
+          meeting.region.toLowerCase().includes(term.toLowerCase()) ||
+          meeting.title.toLowerCase().includes(term.toLowerCase()) ||
+          meeting.date.includes(term) ||
+          meeting.location.toLowerCase().includes(term.toLowerCase()) ||
+          meeting.tags.some((tag) => tag.toLowerCase().includes(term.toLowerCase()))
+      )
+    );
+  };
+
+
+  // 상위 검색어 업데이트 함수
+  const updateTopSearches = (searchHistory) => {
+    const sortedSearches = Object.entries(searchHistory)
+      .sort(([, a], [, b]) => b - a) // 검색 횟수로 정렬
+      .slice(0, 10); // 상위 10개만 표시
+    setTopSearches(sortedSearches);
+  };
+
+  // 순환 기능 (1위씩 순환)
+  useEffect(() => {
+    if (!isExpanded) {
+      const interval = setInterval(() => {
+        setCurrentRank((prevRank) => (prevRank + 1) % topSearches.length);
+      }, 2000); // 2초마다 순위 변경
+      return () => clearInterval(interval);
+    }
+  }, [isExpanded, topSearches]);
+
+  const toggleExpand = () => {
+    setIsExpanded((prev) => !prev);
+  };
 
   return (
     <Box sx={{ padding: '20px', textAlign: 'center', paddingTop: '80px' }}>
       {/* 페이지 제목 */}
       <Box sx={{ '& > :not(style)': { m: 1 } }}>
         <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
-          정규모임 &nbsp; 
+          <a href='/MeetingGroup/regular-Meeting' style={{ textDecoration: 'none', color: 'inherit' }}>
+            정규모임 &nbsp;
+          </a>
           <Fab size="small" color="secondary" aria-label="add" href='/MeetingGroup/regular-Meeting-Make'
             style={{ backgroundColor: '#79c75f' }}>
             <AddIcon />
           </Fab>
         </Typography>
       </Box>
-      <br/>
+      <br />
       {/* 검색바 */}
       <Box
         sx={{
@@ -160,11 +241,69 @@ export default function RegularMeetingPage() {
       >
         <TextField variant="outlined" placeholder="검색어를 입력하세요" sx={{ width: '300px' }}
           value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-        <IconButton color="primary" size="large" onClick={handleSearch}>
-          <SearchIcon />
+        <IconButton size="large" onClick={handleSearch}>
+          <SearchIcon sx={{ color: "green" }} />
         </IconButton>
       </Box>
-      <br/>
+
+      {/* 실시간 검색어 */}
+      <Box sx={{ float: 'right' }}>
+        <Box sx={{ marginTop: '20px', textAlign: 'center', display: 'inline' }}>
+          <Typography variant="h8" sx={{ marginBottom: '10px', fontWeight: 'bold' }}>
+            <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
+              실시간 검색어
+              <IconButton onClick={toggleExpand}>
+                <ArrowDropDownIcon fontSize="large" />
+              </IconButton>
+            </Box>
+          </Typography>
+
+          {!isExpanded ? (
+            // 순환 모드
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              {topSearches[currentRank] && (
+                <>
+                  <Typography variant="h8" sx={{ marginRight: '10px', fontWeight: 'bold' }}>
+                    {currentRank + 1}위
+                  </Typography>
+                  <Typography
+                    variant="h8"
+                    sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline', textDecoration: 'none', color: 'inherit' }}
+                    onClick={() => handleSearchFromList(topSearches[currentRank][0])}
+                  >
+                    {topSearches[currentRank][0]}
+                  </Typography>
+                </>
+              )}
+            </Box>
+          ) : (
+            // 전체 목록 보기
+            <TableContainer component={Paper} sx={{ maxWidth: '500px', margin: '0 auto' }}>
+              <Table>
+                <TableBody>
+                  {topSearches.map(([term, count], index) => (
+                    <TableRow key={index}>
+                      <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                        {index + 1}위
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline', textDecoration: 'none', color: 'inherit' }}
+                        onClick={() => handleSearchFromList(term)}
+                      >
+                        {term}
+                      </TableCell>
+                      <TableCell align="center" sx={{ color: 'gray' }}>
+                        {count}회
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </Box>
+      </Box><br /><br /><br /><br /><br />
       {/* 키워드 태그 */}
       <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', marginBottom: '20px', flexWrap: 'nowrap' }}>
         <IconButton onClick={() => handleTagPagination('prev')} disabled={tagPage === 0} sx={{ alignSelf: 'center' }}>
@@ -209,7 +348,7 @@ export default function RegularMeetingPage() {
           />
         ))}
       </Box>
-      <br/>
+      <br />
       {/* 모임 카드 */}
       <Grid container spacing={3} justifyContent="center">
         {filteredMeetings.map((meeting) => (

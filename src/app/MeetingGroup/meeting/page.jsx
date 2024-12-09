@@ -22,6 +22,8 @@ export default function Home() {
           width: '100%',
           maxHeight: '300px',
           objectFit: 'cover',
+          backgroundSize: "cover", // 이미지 크기 조정
+          backgroundPosition: "center", // 이미지 위치 중앙
           marginBottom: '20px',
         }}
       />
@@ -32,17 +34,17 @@ export default function Home() {
         아래 버튼을 클릭해 다양한 모임에 참여하세요.
       </Typography>
       {/* 버튼 그룹 */}
-      <Grid container spacing={5} justifyContent="center" sx={{ marginTop: '40px' }}>
+      <Grid container spacing={15} justifyContent="center" sx={{ marginTop: '40px' }}>
         {/* 정규 모임 */}
         <Grid item>
-          <Link href="/MeetingGroup/regular-Meeting" passHref style={{ textDecoration: 'none' }}>
+          <Link href="/MeetingGroup/regular-Meeting" style={{ textDecoration: 'none' }}>
             <Paper
               elevation={3}
               sx={{
                 backgroundColor: '#FFFAE6',
                 borderRadius: '10px',
                 height: '300px',
-                width: '230px',
+                width: '250px',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -68,14 +70,14 @@ export default function Home() {
         </Grid>
         {/* 번개 모임 */}
         <Grid item>
-          <Link href="/MeetingGroup/lightning-Meeting" passHref style={{ textDecoration: 'none' }}>
+          <Link href="/MeetingGroup/lightning-Meeting" style={{ textDecoration: 'none' }}>
             <Paper
               elevation={3}
               sx={{
                 backgroundColor: '#FFFAE6',
                 borderRadius: '10px',
                 height: '300px',
-                width: '230px',
+                width: '250px',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -100,7 +102,7 @@ export default function Home() {
           </Link>
         </Grid>
         {/* 내 모임 */}
-        <Grid item>
+        {/* <Grid item>
           <Link href="/MeetingGroup/my-Meeting" passHref style={{ textDecoration: 'none' }}>
             <Paper
               elevation={3}
@@ -131,7 +133,7 @@ export default function Home() {
               </Typography>
             </Paper>
           </Link>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   )}

@@ -213,12 +213,25 @@ export default function LightningMeetingCreatePage() {
           variant="contained"
           color="primary"
           onClick={handleSubmit}
+          style={{ backgroundColor: '#79c75f' }}
           disabled={isSubmitDisabled} // 버튼 비활성화 조건
           href="/MeetingGroup/lightning-Meeting"
         >
           작성
-        </Button>
-        <Button variant="outlined" color="secondary" onClick={handleCancel} href="/MeetingGroup/lightning-Meeting">
+        </Button><span />
+
+        <Button
+          variant="outlined"
+          sx={{
+            color: 'green', // 텍스트 색상
+            borderColor: 'green', // 테두리 색상
+            '&:hover': {
+              borderColor: 'darkgreen', // 호버 시 테두리 색상
+              backgroundColor: 'rgba(0, 128, 0, 0.1)', // 호버 시 배경색
+            },
+          }}
+          onClick={handleCancel} href="/MeetingGroup/lightning-Meeting"
+        >
           취소
         </Button>
       </Box>

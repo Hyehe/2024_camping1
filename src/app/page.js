@@ -14,6 +14,9 @@ export default function Home() {
           width: '100%',
           maxHeight: '300px',
           objectFit: 'cover',
+          // backgroundImage: "url(/images/campingimg.webp)", // 배경 이미지
+          backgroundSize: "cover", // 이미지 크기 조정
+          backgroundPosition: "center", // 이미지 위치 중앙
           marginBottom: '20px',
         }}
       />

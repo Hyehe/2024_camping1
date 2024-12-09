@@ -242,9 +242,9 @@ const Header = () => {
               <Link href="/MeetingGroup/lightning-Meeting" sx={{ textDecoration: "none"}}>
                 <MenuItem sx={{color: "#3C3D37", fontSize: "0.9rem"}}>번개 모임</MenuItem>
               </Link>
-              <Link href="/MeetingGroup/my-Meeting" sx={{ textDecoration: "none"}}>
+              {/* <Link href="/MeetingGroup/my-Meeting" sx={{ textDecoration: "none"}}>
                 <MenuItem sx={{color: "#3C3D37", fontSize: "0.9rem"}}>내 모임</MenuItem>
-              </Link>
+              </Link> */}
             </Box>
           )}
         </Box>

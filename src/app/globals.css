@@ -1,111 +1,45 @@
-/* globals.css */
-
-/* Reset 기본값 */
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #f9f9f9;
-  height: 100%;
-}
-
-/* 페이지 전체 레이아웃 */
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-<<<<<<< HEAD
-/* 헤더 스타일 */
-header {
-  background-color: #ff914d;
-  color: white;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.loading-screen {
   position: fixed;
   top: 0;
-  width: 100%;
-  z-index: 1000;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-header nav a {
-  color: white;
-=======
-ol,
-ul {
-  list-style-type: none;
-}
-
-a {
->>>>>>> bfd43f4b9c9e047290808518dd08ac4f79886a8b
-  text-decoration: none;
-  margin-left: 20px;
-  font-weight: bold;
-}
-
-header nav a:hover {
-  text-decoration: underline;
-}
-
-/* 메인 콘텐츠 (헤더와 푸터 사이에 위치) */
-main {
-  flex: 1;
-  margin-top: 60px;
-  margin-bottom: 60px;
-  padding: 0 15%; /* 좌우 여백 10% */
-  box-sizing: border-box;
-}
-
-/* 푸터 스타일 */
-footer {
-  background-color: #ff914d;
-  color: white;
-  padding: 10px 20px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* 배너 스타일 */
-.banner {
-  width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-  margin-bottom: 20px;
-}
-
-/* 카드 컨테이너 */
-.card-container {
-  display: flex;
-  justify-content: center;
-  gap: 200px; /* 버튼 간격 */
-  margin-top: 40px;
-  padding: 0 20px;
-}
-
-/* 카드 */
-.card {
-  background-color: #fffae6;
-  border-radius: 10px;
-  height: 300px;
-  width: 330px; /* 좌우 크기 확장 */
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: white; /* 배경색 */
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s;
+  z-index: 9999;
+  animation: fadeOut 3s forwards;
 }
 
-.card:hover {
-  background-color: #ffe5b4;
+.loading-image {
+  width: 1500px;
+  height: 1000px;
+  animation: moveAndFade 40s forwards;
 }
 
-.card h3 {
-  margin: 0;
+@keyframes moveAndFade {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-20px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
