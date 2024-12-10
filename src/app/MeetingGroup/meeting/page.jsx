@@ -16,7 +16,7 @@ export default function Home() {
       {/* 배너 이미지 */}
       <Box
         component="img"
-        src="/images/yellowsb.gif"
+        src="/images/bg-dark.jpg"
         alt="배너"
         sx={{
           width: '100%',

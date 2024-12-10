@@ -240,14 +240,20 @@ export default function RegularMeetingPage() {
         }}
       >
         <TextField variant="outlined" placeholder="검색어를 입력하세요" sx={{ width: '300px' }}
-          value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+          value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} 
+          onKeyPress={(e)=>{
+            if (e.key === 'Enter') {
+              handleSearch(); // Enter키 눌러도 검색 가능
+            }
+          }}
+          />
         <IconButton size="large" onClick={handleSearch}>
           <SearchIcon sx={{ color: "green" }} />
         </IconButton>
       </Box>
 
       {/* 실시간 검색어 */}
-      <Box sx={{ float: 'right' }}>
+      <Box sx={{ float: 'right'}}>
         <Box sx={{ marginTop: '20px', textAlign: 'center', display: 'inline' }}>
           <Typography variant="h8" sx={{ marginBottom: '10px', fontWeight: 'bold' }}>
             <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
@@ -268,7 +274,7 @@ export default function RegularMeetingPage() {
                   </Typography>
                   <Typography
                     variant="h8"
-                    sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline', textDecoration: 'none', color: 'inherit' }}
+                    sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
                     onClick={() => handleSearchFromList(topSearches[currentRank][0])}
                   >
                     {topSearches[currentRank][0]}

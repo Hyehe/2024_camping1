@@ -13,8 +13,8 @@
 }
 
 .loading-image {
-  width: 1500px;
-  height: 1000px;
+  width: 2500px;
+  height: 2500px;
   animation: moveAndFade 40s forwards;
 }
 
