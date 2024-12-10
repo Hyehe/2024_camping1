@@ -8,7 +8,7 @@ export default function Home() {
     <Box sx={{ textAlign: 'center', padding: '20px' }}>
       <Box
         component="img"
-        src="/images/car1.jpg"
+        src="/images/camping1.png"
         alt="배너"
         sx={{
           width: '100%',
