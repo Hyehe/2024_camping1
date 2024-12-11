@@ -100,9 +100,14 @@ export default function RegularMeetingPage() {
   const [isExpanded, setIsExpanded] = useState(false);
 
 
-  const handleCardClick = (id) => {
+ const handleCardClick = (id) => {
     router.push(`/MeetingGroup/detail/${id}`);
   };
+  
+    const handleTagFilter = (tag) => {
+      // setSelectedTag(tag);
+      setFilteredMeetings(meetings.filter((meeting) => meeting.tags.includes(tag)));
+    };
 
   const handleRegionFilter = (region) => {
     if (region === '전체') {
@@ -110,10 +115,6 @@ export default function RegularMeetingPage() {
     } else {
       setFilteredMeetings(meetings.filter((meeting) => meeting.region === region));
     }
-  };
-
-  const handleTagFilter = (tag) => {
-    setFilteredMeetings(meetings.filter((meeting) => meeting.tags.includes(tag)));
   };
 
   const handleSearch = () => {
@@ -140,16 +141,6 @@ export default function RegularMeetingPage() {
     updateTopSearches(updatedSearchHistory);
   };
 
-  // 검색어 추가 함수
-  // const addSearchTerm = (term) => {
-  //   const updatedSearchHistory = { ...searchHistory };
-  //   updatedSearchHistory[term] = (updatedSearchHistory[term] || 0) + 1;
-
-  //   setSearchHistory(updatedSearchHistory);
-  //   localStorage.setItem('searchHistory', JSON.stringify(updatedSearchHistory)); // 로컬스토리지 저장
-  //   updateTopSearches(updatedSearchHistory);
-  // };
-
   const handleTagPagination = (direction) => {
     setTagPage((prevPage) => {
       // 태그 갯수를 기준으로 총 페이지 수 계산
@@ -168,7 +159,6 @@ export default function RegularMeetingPage() {
   const visibleTags = tags.slice(tagPage * 7, (tagPage + 1) * 7);
 
   // 실시간 검색 기능
-
   // 로컬스토리지에서 검색 기록 로드
   useEffect(() => {
     const savedSearchHistory = JSON.parse(localStorage.getItem('searchHistory')) || {};
@@ -189,6 +179,12 @@ export default function RegularMeetingPage() {
           meeting.tags.some((tag) => tag.toLowerCase().includes(term.toLowerCase()))
       )
     );
+    // 실검에서 누른 것도 기록 추가 및 저장
+    const updatedSearchHistory = { ...searchHistory };
+    updatedSearchHistory[term] = (updatedSearchHistory[term] || 0) + 1;
+    setSearchHistory(updatedSearchHistory);
+    localStorage.setItem('searchHistory', JSON.stringify(updatedSearchHistory)); // 로컬스토리지 저장
+    updateTopSearches(updatedSearchHistory);
   };
 
 
@@ -215,7 +211,7 @@ export default function RegularMeetingPage() {
   };
 
   return (
-    <Box sx={{ padding: '20px', textAlign: 'center', paddingTop: '80px' }}>
+    <Box sx={{ padding: '20px', textAlign: 'center', paddingTop: '80px', margin: '0 auto', width: '70%'  }}>
       {/* 페이지 제목 */}
       <Box sx={{ '& > :not(style)': { m: 1 } }}>
         <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
@@ -229,87 +225,120 @@ export default function RegularMeetingPage() {
         </Typography>
       </Box>
       <br />
-      {/* 검색바 */}
-      <Box
+
+      {/* 검색바 및 실시간 검색어 */}
+<Box
+  sx={{
+    display: 'flex',
+    flexDirection: { xs: 'column', md: 'row' },
+    justifyContent: { md: 'center', xs: 'center' },
+    alignItems: 'center',
+    gap: 2,
+    marginBottom: '20px',
+    position: 'relative',
+  }}
+>
+  {/* 검색창 */}
+  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    <TextField
+      variant="outlined"
+      placeholder="검색어를 입력하세요"
+      sx={{ width: { xs: '100%', md: '300px' } }}
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter') {
+          handleSearch(); // Enter키 눌러도 검색 가능
+        }
+      }}
+    />
+    <IconButton size="large" onClick={handleSearch}>
+      <SearchIcon sx={{ color: 'green' }} />
+    </IconButton>
+  </Box>
+
+  {/* 실시간 검색어 */}
+  <Box
+    sx={{
+      position: { md: 'absolute', lg: 'absolute'},
+      right: 0,
+      top: '0',
+      display: 'flex',
+      flexDirection: 'column',
+       alignItems: { xs: 'center', md: 'flex-end' },
+      width: { xs: '100%', md: 'auto' },
+    }}
+  >
+    <Typography
+      variant="h8"
+      sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center'
+        // ,justifyContent: { xs: 'center', md: 'flex-start' }, 
+      }}
+    >
+      실시간 검색어
+      <IconButton onClick={toggleExpand}>
+        <ArrowDropDownIcon fontSize="large" />
+      </IconButton>
+    </Typography>
+
+    {!isExpanded ? (
+      // 순환 모드
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        {topSearches[currentRank] && (
+          <>
+            <Typography variant="h8" sx={{ marginRight: '10px', fontWeight: 'bold' }}>
+              {currentRank + 1}위
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'none', color:'black',marginRight: '50px' }}
+              onClick={() => handleSearchFromList(topSearches[currentRank][0])}
+            >
+              {topSearches[currentRank][0]}
+            </Typography>
+          </>
+        )}
+      </Box>
+    ) : (
+      // 전체 목록 보기
+      <TableContainer
+        component={Paper}
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 1,
-          marginBottom: '20px',
+          width: '300px',
+          // width: { xs: '100%', md: '300px' },
+          maxHeight: '300px',
+          overflowY: 'auto',
+          boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+          marginTop: '10px',
+          zIndex:'10'
         }}
       >
-        <TextField variant="outlined" placeholder="검색어를 입력하세요" sx={{ width: '300px' }}
-          value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} 
-          onKeyPress={(e)=>{
-            if (e.key === 'Enter') {
-              handleSearch(); // Enter키 눌러도 검색 가능
-            }
-          }}
-          />
-        <IconButton size="large" onClick={handleSearch}>
-          <SearchIcon sx={{ color: "green" }} />
-        </IconButton>
-      </Box>
-
-      {/* 실시간 검색어 */}
-      <Box sx={{ float: 'right'}}>
-        <Box sx={{ marginTop: '20px', textAlign: 'center', display: 'inline' }}>
-          <Typography variant="h8" sx={{ marginBottom: '10px', fontWeight: 'bold' }}>
-            <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
-              실시간 검색어
-              <IconButton onClick={toggleExpand}>
-                <ArrowDropDownIcon fontSize="large" />
-              </IconButton>
-            </Box>
-          </Typography>
-
-          {!isExpanded ? (
-            // 순환 모드
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              {topSearches[currentRank] && (
-                <>
-                  <Typography variant="h8" sx={{ marginRight: '10px', fontWeight: 'bold' }}>
-                    {currentRank + 1}위
-                  </Typography>
-                  <Typography
-                    variant="h8"
-                    sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
-                    onClick={() => handleSearchFromList(topSearches[currentRank][0])}
-                  >
-                    {topSearches[currentRank][0]}
-                  </Typography>
-                </>
-              )}
-            </Box>
-          ) : (
-            // 전체 목록 보기
-            <TableContainer component={Paper} sx={{ maxWidth: '500px', margin: '0 auto' }}>
-              <Table>
-                <TableBody>
-                  {topSearches.map(([term, count], index) => (
-                    <TableRow key={index}>
-                      <TableCell align="center" sx={{ fontWeight: 'bold' }}>
-                        {index + 1}위
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline', textDecoration: 'none', color: 'inherit' }}
-                        onClick={() => handleSearchFromList(term)}
-                      >
-                        {term}
-                      </TableCell>
-                      <TableCell align="center" sx={{ color: 'gray' }}>
-                        {count}회
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </Box>
-      </Box><br /><br /><br /><br /><br />
+        <Table>
+          <TableBody>
+            {topSearches.map(([term, count], index) => (
+              <TableRow key={index}>
+                <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                  {index + 1}위
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'none', color:'black' }}
+                  onClick={() => handleSearchFromList(term)}
+                >
+                  {term}
+                </TableCell>
+                <TableCell align="center" sx={{ color: 'gray' }}>
+                  {count}회
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )}
+  </Box>
+</Box>
+<br /><br />
       {/* 키워드 태그 */}
       <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', marginBottom: '20px', flexWrap: 'nowrap' }}>
         <IconButton onClick={() => handleTagPagination('prev')} disabled={tagPage === 0} sx={{ alignSelf: 'center' }}>
@@ -326,6 +355,7 @@ export default function RegularMeetingPage() {
               padding: '10px',
               backgroundColor: '#f2faeb',
               '&:hover': { backgroundColor: '#d7f0c2' },
+              '&.MuiChip-clicked': { backgroundColor: '#a0d996', color: 'white' }, // 클릭 후 배경 및 글자색
               whiteSpace: 'nowrap', // 텍스트가 한 줄로만 표시되도록 설정
             }}
           />

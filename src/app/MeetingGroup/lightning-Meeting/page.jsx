@@ -90,7 +90,7 @@ export default function LightningMeetingPage() {
   };
 
   return (
-    <Box sx={{ textAlign: "center", padding: "20px", paddingTop: "80px" }}>
+    <Box sx={{ textAlign: "center", padding: "20px", paddingTop: "80px", margin: '0 auto', width: '70%' }}>
       <Box sx={{ "& > :not(style)": { m: 1 } }}>
         <Typography
           variant="h4"
@@ -209,14 +209,14 @@ export default function LightningMeetingPage() {
           boundaryCount={1}
           sx={{
             "& .MuiPaginationItem-root": {
-              backgroundColor: "rgba(0, 128, 0, 0.3)", // 녹색 배경 + 30% 투명도
-              color: "white", // 글자색
+              //backgroundColor: "rgba(0, 128, 0, 0.3)", // 녹색 배경 + 30% 투명도
+              color: "black", // 글자색
               "&:hover": {
                 backgroundColor: "rgba(0, 128, 0, 0.6)", // 녹색 배경 + 60% 투명도
               },
             },
             "& .Mui-selected": {
-              backgroundColor:  "rgba(0, 128, 0, 0.9)", // 선택된 페이지 녹색 배경 + 90% 투명도
+              backgroundColor:  "rgba(0, 128, 0, 0.7)", // 선택된 페이지 녹색 배경 + 90% 투명도
               color: "white", // 선택된 페이지 글자색
               fontWeight: "bold", // 선택된 페이지 글자 굵기
               "&:hover": {

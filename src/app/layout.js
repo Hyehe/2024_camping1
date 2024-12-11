@@ -7,27 +7,25 @@ import { useState, useEffect } from 'react';
 import './globals.css';
 import LoadingScreen from './components/LoadingScreen';
 import { useRouter } from 'next/navigation';
-
-
 export default function Layout({ children }) {
 
   const router = useRouter(); // 현재 경로 가져오기
-  const [isMeetingPage, setIsMeetingPage] = useState(false);
+  // const [isMeetingPage, setIsMeetingPage] = useState(true);
 
-  useEffect(() => {
-    if (router.pathname) {
-      // router가 초기화된 후 경로를 확인
-      setIsMeetingPage(router.pathname?.startsWith('/meeting'));
-    }
-  }, [router.pathname]); // 경로가 변경될 때마다 실행
+  
+  // useEffect(() => {
+  //   if (router.pathname) {
+  //     // router가 초기화된 후 경로를 확인
+  //     setIsMeetingPage(router.pathname?.startsWith('/meeting'));
+  //   }
+  // }, [router.pathname]); // 경로가 변경될 때마다 실행
 
   // 로컬 스토리지를 바로 확인하여 초기 상태를 설정
   const [isLoading, setIsLoading] = useState(() => {
     const hasVisited = localStorage.getItem('hasVisited');
     return !hasVisited; // 방문기록이 없으면 로딩 화면을 보여준다.
   });
-
-
+  
   useEffect(() => {
     if (isLoading) {
       const timer = setTimeout(() => {
@@ -53,13 +51,15 @@ return (
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          minHeight: '100vh',
+          minHeight: '100vh',  
           // margin: '0 auto', // 화면 중앙 정렬
+          // width: '70%',
+          
+          // margin: isMeetingPage ? '0 !important' : '0 auto',
           padding: '0', // 모든 방향에서 여백 제거
           // paddingTop: '0px', // 헤더 높이만큼 여백
           paddingBottom: '100px', // 푸터 높이만큼 여백
-          width: isMeetingPage ? '100%' : '70%', // meeting 페이지에서는 100%, 그 외는 70%
-          // width: '100%' 
+          // width: isMeetingPage ? '100%' : '70%', // meeting 페이지에서는 100%, 그 외는 70%
         }}
       >
         {children}
