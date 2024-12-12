@@ -108,7 +108,7 @@ export default function LightningMeetingPage() {
             color="secondary"
             aria-label="add"
             href="/MeetingGroup/lightning-Meeting-Make"
-            style={{ backgroundColor: "#79c75f" }}
+            style={{ backgroundColor: "#597445" }}
           >
             <AddIcon />
           </Fab>
@@ -216,11 +216,11 @@ export default function LightningMeetingPage() {
               },
             },
             "& .Mui-selected": {
-              backgroundColor:  "rgba(0, 128, 0, 0.7)", // 선택된 페이지 녹색 배경 + 90% 투명도
+              backgroundColor:  "rgba(0, 128, 0)", // 선택된 페이지 녹색 배경
               color: "white", // 선택된 페이지 글자색
               fontWeight: "bold", // 선택된 페이지 글자 굵기
               "&:hover": {
-                backgroundColor: "rgba(0, 128, 0, 1)", // 선택된 페이지 호버 시 완전 불투명
+                backgroundColor: "rgba(0, 128, 0, 1)", // 선택된 페이지 호버 시 
               },
             },
           }}

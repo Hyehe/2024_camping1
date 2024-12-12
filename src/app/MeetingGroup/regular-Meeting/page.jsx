@@ -16,6 +16,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
+
 const meetings = [
   {
     id: 1,
@@ -26,6 +27,7 @@ const meetings = [
     members: '25/50',
     image: '/images/photo-3.jpg',
     tags: ['#카라반', '#글램핑', '#산'],
+    liked: false, // 좋아요 상태 추가
   },
   {
     id: 2,
@@ -36,6 +38,7 @@ const meetings = [
     members: '14/21',
     image: '/images/tree-3.jpg',
     tags: ['#야영', '#바다', '#산'],
+    liked: false
   },
   {
     id: 3,
@@ -46,6 +49,7 @@ const meetings = [
     members: '5/7',
     image: '/images/bg-dark.jpg',
     tags: ['#오토캠핑', '#야영', '#카라반'],
+    liked: false, 
   },
   {
     id: 4,
@@ -56,6 +60,7 @@ const meetings = [
     members: '18/24',
     image: '/images/sims.gif',
     tags: ['#바다', '#글램핑', '#오토캠핑'],
+    liked: false, 
   },
   {
     id: 5,
@@ -66,6 +71,7 @@ const meetings = [
     members: '17/24',
     image: '/images/yellowsb.gif',
     tags: ['#바다', '#야영', '#자연'],
+    liked: false, 
   },
   {
     id: 6,
@@ -76,6 +82,7 @@ const meetings = [
     members: '10/35',
     image: '/images/tree-2.jpg',
     tags: ['#산', '#글램핑', '#오토캠핑'],
+    liked: false, 
   },
 ];
 
@@ -103,12 +110,23 @@ export default function RegularMeetingPage() {
  const handleCardClick = (id) => {
     router.push(`/MeetingGroup/detail/${id}`);
   };
-  
+
+  // 하트 아이콘(좋아요)
+  const toggleLike = (id) => {
+    setFilteredMeetings((prevMeetings) =>
+      prevMeetings.map((meeting) =>
+        meeting.id === id ? { ...meeting, liked: !meeting.liked } : meeting
+      )
+    );
+  };
+
+  // 태그 버튼 검색 필터
     const handleTagFilter = (tag) => {
       // setSelectedTag(tag);
       setFilteredMeetings(meetings.filter((meeting) => meeting.tags.includes(tag)));
     };
 
+  // 지역 버튼
   const handleRegionFilter = (region) => {
     if (region === '전체') {
       setFilteredMeetings(meetings);
@@ -117,6 +135,7 @@ export default function RegularMeetingPage() {
     }
   };
 
+  // 검색바의 검색 필터 
   const handleSearch = () => {
     if (!searchTerm.trim()) return;
 
@@ -141,6 +160,7 @@ export default function RegularMeetingPage() {
     updateTopSearches(updatedSearchHistory);
   };
 
+  // 태그 페이징
   const handleTagPagination = (direction) => {
     setTagPage((prevPage) => {
       // 태그 갯수를 기준으로 총 페이지 수 계산
@@ -159,6 +179,7 @@ export default function RegularMeetingPage() {
   const visibleTags = tags.slice(tagPage * 7, (tagPage + 1) * 7);
 
   // 실시간 검색 기능
+
   // 로컬스토리지에서 검색 기록 로드
   useEffect(() => {
     const savedSearchHistory = JSON.parse(localStorage.getItem('searchHistory')) || {};
@@ -166,7 +187,7 @@ export default function RegularMeetingPage() {
     updateTopSearches(savedSearchHistory);
   }, []);
 
-
+  // 실시간 검색어 리스트에서 검색어 클릭 시 필터링
   const handleSearchFromList = (term) => {
     setSearchTerm(term);
     setFilteredMeetings(
@@ -179,6 +200,7 @@ export default function RegularMeetingPage() {
           meeting.tags.some((tag) => tag.toLowerCase().includes(term.toLowerCase()))
       )
     );
+
     // 실검에서 누른 것도 기록 추가 및 저장
     const updatedSearchHistory = { ...searchHistory };
     updatedSearchHistory[term] = (updatedSearchHistory[term] || 0) + 1;
@@ -186,7 +208,6 @@ export default function RegularMeetingPage() {
     localStorage.setItem('searchHistory', JSON.stringify(updatedSearchHistory)); // 로컬스토리지 저장
     updateTopSearches(updatedSearchHistory);
   };
-
 
   // 상위 검색어 업데이트 함수
   const updateTopSearches = (searchHistory) => {
@@ -210,6 +231,7 @@ export default function RegularMeetingPage() {
     setIsExpanded((prev) => !prev);
   };
 
+
   return (
     <Box sx={{ padding: '20px', textAlign: 'center', paddingTop: '80px', margin: '0 auto', width: '70%'  }}>
       {/* 페이지 제목 */}
@@ -219,7 +241,7 @@ export default function RegularMeetingPage() {
             정규모임 &nbsp;
           </a>
           <Fab size="small" color="secondary" aria-label="add" href='/MeetingGroup/regular-Meeting-Make'
-            style={{ backgroundColor: '#79c75f' }}>
+            style={{ backgroundColor: '#597445' }}>
             <AddIcon />
           </Fab>
         </Typography>
@@ -339,6 +361,7 @@ export default function RegularMeetingPage() {
   </Box>
 </Box>
 <br /><br />
+
       {/* 키워드 태그 */}
       <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', marginBottom: '20px', flexWrap: 'nowrap' }}>
         <IconButton onClick={() => handleTagPagination('prev')} disabled={tagPage === 0} sx={{ alignSelf: 'center' }}>
@@ -353,7 +376,7 @@ export default function RegularMeetingPage() {
             sx={{
               fontSize: '14px',
               padding: '10px',
-              backgroundColor: '#f2faeb',
+              backgroundColor: '#f2fce8',
               '&:hover': { backgroundColor: '#d7f0c2' },
               '&.MuiChip-clicked': { backgroundColor: '#a0d996', color: 'white' }, // 클릭 후 배경 및 글자색
               whiteSpace: 'nowrap', // 텍스트가 한 줄로만 표시되도록 설정
@@ -385,6 +408,7 @@ export default function RegularMeetingPage() {
         ))}
       </Box>
       <br />
+
       {/* 모임 카드 */}
       <Grid container spacing={3} justifyContent="center">
         {filteredMeetings.map((meeting) => (
@@ -394,26 +418,57 @@ export default function RegularMeetingPage() {
               onClick={() => handleCardClick(meeting.id)}
               sx={{
                 cursor: 'pointer',
-                width: '350px',
-                height: '240px', // 높이를 통일
+                width: '360px',
+                height: '230px', // 높이를 통일
                 display: 'flex',
                 alignItems: 'center',
                 padding: '16px',
-                backgroundColor: '#f2faeb',
+                backgroundColor: '#F5EEDC',
+                color: '#704C2E',
                 boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                position: 'relative',  // 하트 아이콘을 절대 위치로 배치
                 '&:hover': {
-                  backgroundColor: '#FFE5B4',
+                  backgroundColor: '#ffa354',
                 },
               }}
             >
+              {/* 하트 아이콘 */}
+        <Box
+          onClick={(e) => {
+            e.stopPropagation(); // 카드 클릭 이벤트와 구분
+            toggleLike(meeting.id);
+          }}
+          sx={{
+            position: 'absolute',
+            top: '10px',
+            left: '10px',
+            cursor: 'pointer',
+            zIndex: 10,
+          }}
+        >
+          {meeting.liked ? (
+            <img
+              src="/images/heart-fill-icon.svg"
+              alt="좋아요"
+              style={{ width: '24px', height: '24px' }}
+            />
+          ) : (
+            <img
+              src="/images/heart-icon.svg"
+              alt="좋아요 해제"
+              style={{ width: '24px', height: '24px' }}
+            />
+          )}
+        </Box>
+
               {/* 모임 이미지 */}
               <Box
                 component="img"
                 src={meeting.image}
                 alt={meeting.title}
                 sx={{
-                  width: '130px',
-                  height: '130px',
+                  width: '140px',
+                  height: '140px',
                   borderRadius: '8px',
                   objectFit: 'cover',
                   marginRight: '16px',
@@ -424,7 +479,7 @@ export default function RegularMeetingPage() {
               {/* <Box sx={{ width: '100%' }}> */}
               <Box
                 sx={{
-                  width: 'calc(100% - 136px)', // 이미지 크기 + margin을 제외한 너비 설정
+                  width: 'calc(100% - 146px)', // 이미지 크기 + margin을 제외한 너비 설정
                   overflow: 'hidden',
                 }}
               >
@@ -458,7 +513,7 @@ export default function RegularMeetingPage() {
                 </Box>
                 <Box sx={{ marginTop: '8px', display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                   {meeting.tags.map((tag, idx) => (
-                    <Chip key={idx} label={tag} sx={{ backgroundColor: '#d7f0c2', fontSize: '12px' }} />
+                    <Chip key={idx} label={tag} sx={{ backgroundColor: '#b3d468', fontSize: '12px' }} />
                   ))}
                 </Box>
               </Box>

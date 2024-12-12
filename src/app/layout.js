@@ -31,7 +31,8 @@ export default function Layout({ children }) {
       const timer = setTimeout(() => {
         setIsLoading(false);
         localStorage.setItem('hasVisited', 'true'); // 방문 기록 저장
-      }, 3000); // 로딩 화면 3초 후 사라짐
+        console.log('로딩 종료');
+      }, 6000); // 로딩 화면 3초 후 사라짐
 
       return () => clearTimeout(timer);
     }
@@ -41,7 +42,7 @@ return (
   <html lang="ko">
     <head />
     <body>
-    {isLoading ? <LoadingScreen /> : ""}
+    {isLoading ? <LoadingScreen /> : null}
       <CssBaseline />
       {/* 헤더 */}
       <Header />

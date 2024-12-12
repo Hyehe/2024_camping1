@@ -54,37 +54,38 @@ export default function MeetingMainPage() {
               variant="h3"
               sx={{
                 fontWeight: "bold",
-                animation: "fadeInUp 2s ease-in-out", // 글자가 위로 올라오며 나타남
+                animation: "fadeInUp 3s ease-in-out, textGlow 4s infinite" // 글자가 위로 올라오며 빛남
+                
               }}
-              >
-            {/* 이미지 추가 */}
-  <Box
-    component="img"
-    src="/images/starsss.png"
-    alt="gold star"
-    sx={{
-      width: "50px", // 이미지 너비 조정
-      height: "50px", // 이미지 높이 조정
-      marginRight: "10px", // 텍스트와 간격
-    }}
-  /><br/>
-               
+            >
+              {/* 이미지 추가 */}
+              <Box
+                component="img"
+                src="/images/starsss.png"
+                alt="gold star"
+                sx={{
+                  width: "50px", // 이미지 너비 조정
+                  height: "50px", // 이미지 높이 조정
+                  marginRight: "10px", // 텍스트와 간격
+                }}
+              /><br />
+
               함께해요
             </Typography>
             <Typography
               variant="h6"
               sx={{
                 marginTop: "20px",
-                animation: "fadeIn 3s ease-in-out", // 글자가 서서히 나타남
+                animation: "fadeInUp 3s ease-in-out", // 글자가 서서히 나타남
               }}
             >
-              아래 버튼을 클릭하여 다양한 모임에 참여하세요.
+              아래 버튼을 클릭하여 다양한 모임에 참여하세요
             </Typography>
           </Box>
         </Box>
         {/* CSS 애니메이션 추가 */}
-  <style>
-    {`
+        <style>
+          {`
       @keyframes fadeInUp {
         0% {
           opacity: 0;
@@ -104,9 +105,22 @@ export default function MeetingMainPage() {
           opacity: 1;
         }
       }
+
+      @keyframes textGlow {
+  from {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 1);
+  }
+  to {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+}
+
     `}
-  </style>
-        
+        </style>
+
       </Box>
 
       {/* 모임 선택 섹션 */}
@@ -140,7 +154,7 @@ export default function MeetingMainPage() {
               height: "400px"
             }}
           >
-             <Diversity3Icon sx={{ fontSize: "60px", color: "#79c75f", height: '130px', width:'100px'}} />
+            <Diversity3Icon sx={{ fontSize: "60px", color: "#79c75f", height: '130px', width: '100px' }} />
             {/* 노란색 color: "#ffca28" */}
             <Typography variant="h5" sx={{ margin: "20px 0" }}>
               정규 모임
@@ -173,7 +187,7 @@ export default function MeetingMainPage() {
               height: "400px"
             }}
           >
-            <FlashOnIcon sx={{ fontSize: "60px", color: "#ffca28", height: '130px', width:'100px' }} />
+            <FlashOnIcon sx={{ fontSize: "60px", color: "#ffca28", height: '130px', width: '100px' }} />
             <Typography variant="h5" sx={{ margin: "20px 0" }}>
               번개 모임
             </Typography>
@@ -192,14 +206,14 @@ export default function MeetingMainPage() {
           </Paper>
         </Grid>
       </Grid>
-      <Button
+      {/* <Button
         variant="contained"
         color="warning"
         href="/MeetingGroup/my-Meeting"
         sx={{ marginBottom: '60px' }}
       >
         연습
-      </Button>
+      </Button> */}
     </Box>
   );
 }

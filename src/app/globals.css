@@ -22,23 +22,19 @@ html, body {
 }
 
 .loading-image {
-  width: 2500px;
-  height: 2500px;
-  animation: moveAndFade 40s forwards;
+  width: 2600px;
+  height: 2400px;
+  animation: moveAndFade 6s forwards;
 }
 
 @keyframes moveAndFade {
   0% {
-    transform: translateY(0);
     opacity: 1;
-  }
-  50% {
-    transform: translateY(-20px);
-    opacity: 0.8;
+    transform: translateY(0);
   }
   100% {
-    transform: translateY(-50px);
     opacity: 0;
+    transform: translateY(-60%);
   }
 }
 

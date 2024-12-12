@@ -100,10 +100,11 @@ export default function BulletinDetailPage() {
     <Box sx={{ padding: "20px", maxWidth: "1000px", margin: "0 auto", width: '800px', marginTop:'70px' }}>
       {/* 게시글 내용 */}
       <Paper sx={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="body1" sx={{ marginBottom: '10px' }}>
-          <Typography variant="h4" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
+          <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
             {post?.title || '게시글을 찾을 수 없습니다.'}
-          </Typography><br />
+          </Typography>
+          <br />
+        <Typography variant="body1" sx={{ marginBottom: '10px' }}>
           <strong>캠핑 장소 : </strong> {post?.location}
         </Typography>
         <Typography variant="body1" sx={{ marginBottom: '10px' }}>
