@@ -15,6 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import '../../globals.css';
 
 
 const meetings = [
@@ -32,7 +33,7 @@ const meetings = [
   {
     id: 2,
     region: '경기',
-    title: '야영 캠프',
+    title: '경빈 캠프',
     date: '2024.12.09',
     location: '마포구',
     members: '14/21',
@@ -49,7 +50,7 @@ const meetings = [
     members: '5/7',
     image: '/images/bg-dark.jpg',
     tags: ['#오토캠핑', '#야영', '#카라반'],
-    liked: false, 
+    liked: false,
   },
   {
     id: 4,
@@ -60,7 +61,7 @@ const meetings = [
     members: '18/24',
     image: '/images/sims.gif',
     tags: ['#바다', '#글램핑', '#오토캠핑'],
-    liked: false, 
+    liked: false,
   },
   {
     id: 5,
@@ -71,7 +72,7 @@ const meetings = [
     members: '17/24',
     image: '/images/yellowsb.gif',
     tags: ['#바다', '#야영', '#자연'],
-    liked: false, 
+    liked: false,
   },
   {
     id: 6,
@@ -82,17 +83,17 @@ const meetings = [
     members: '10/35',
     image: '/images/tree-2.jpg',
     tags: ['#산', '#글램핑', '#오토캠핑'],
-    liked: false, 
+    liked: false,
   },
 ];
 
 const regions = ['전체', '서울', '경기', '인천', '강원도', '부산', '광주', '수원', '용인', '고양', '창원', '대구', '대전', '울산', '충청도', '전라도'];
 const tags = ['#카라반', '#글램핑', '#야영', '#산', '#바다',
-  '#오토캠핑', '#자연', '#캠프파이어', '#별 관찰', '#텐트',
+  '#캠프파이어', '#오토캠핑', '#자연', '#별 관찰', '#텐트',
   '#캠핑 장비', '#팀워크', '#소통', '#즐거운 추억', '#자연 보호',
   '#힐링', '#맛있는 음식', '#트레킹', '#낚시', '#자전거 타기',
   '#하이킹', '#스모어', '#캠핑 요리', '#자연 탐험', '#야외 게임',
-  '#일출', '#일몰', '#야생동물 관찰 ', '#사진', '#물놀이',
+  '#일출', '#일몰', '#야생동물 관찰', '#사진', '#물놀이',
   '#친목', '#산책', '#명상', '#휴식', '#오프그리드 생활',];
 
 export default function RegularMeetingPage() {
@@ -107,24 +108,47 @@ export default function RegularMeetingPage() {
   const [isExpanded, setIsExpanded] = useState(false);
 
 
- const handleCardClick = (id) => {
+  const handleCardClick = (id) => {
     router.push(`/MeetingGroup/detail/${id}`);
   };
 
-  // 하트 아이콘(좋아요)
-  const toggleLike = (id) => {
+  // 좋아요 상태 로드
+  useEffect(() => {
+    const savedLikes = JSON.parse(localStorage.getItem('likedMeetings')) || {};
     setFilteredMeetings((prevMeetings) =>
-      prevMeetings.map((meeting) =>
-        meeting.id === id ? { ...meeting, liked: !meeting.liked } : meeting
-      )
+      prevMeetings.map((meeting) => ({
+        ...meeting,
+        liked: !!savedLikes[meeting.id],
+      }))
     );
+  }, []);
+
+  // 좋아요 상태 저장
+  const toggleLike = (id) => {
+    setFilteredMeetings((prevMeetings) => {
+      const updatedMeetings = prevMeetings.map((meeting) =>
+        meeting.id === id ? { ...meeting, liked: !meeting.liked } : meeting
+      );
+
+      // 로컬 스토리지 업데이트
+      const likedState = updatedMeetings.reduce((acc, meeting) => {
+        if (meeting.liked) acc[meeting.id] = true;
+        return acc;
+      }, {});
+      localStorage.setItem('likedMeetings', JSON.stringify(likedState));
+
+      return updatedMeetings;
+    });
   };
 
+
+
+
   // 태그 버튼 검색 필터
-    const handleTagFilter = (tag) => {
-      // setSelectedTag(tag);
-      setFilteredMeetings(meetings.filter((meeting) => meeting.tags.includes(tag)));
-    };
+  const handleTagFilter = (tag) => {
+    // setSelectedTag(tag);
+    setFilteredMeetings(meetings.filter((meeting) => meeting.tags.includes(tag)));
+  };
 
   // 지역 버튼
   const handleRegionFilter = (region) => {
@@ -233,7 +257,7 @@ export default function RegularMeetingPage() {
 
 
   return (
-    <Box sx={{ padding: '20px', textAlign: 'center', paddingTop: '80px', margin: '0 auto', width: '70%'  }}>
+    <Box sx={{ padding: '20px', textAlign: 'center', paddingTop: '80px', margin: '0 auto', width: '70%' }}>
       {/* 페이지 제목 */}
       <Box sx={{ '& > :not(style)': { m: 1 } }}>
         <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
@@ -249,118 +273,129 @@ export default function RegularMeetingPage() {
       <br />
 
       {/* 검색바 및 실시간 검색어 */}
-<Box
-  sx={{
-    display: 'flex',
-    flexDirection: { xs: 'column', md: 'row' },
-    justifyContent: { md: 'center', xs: 'center' },
-    alignItems: 'center',
-    gap: 2,
-    marginBottom: '20px',
-    position: 'relative',
-  }}
->
-  {/* 검색창 */}
-  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-    <TextField
-      variant="outlined"
-      placeholder="검색어를 입력하세요"
-      sx={{ width: { xs: '100%', md: '300px' } }}
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      onKeyPress={(e) => {
-        if (e.key === 'Enter') {
-          handleSearch(); // Enter키 눌러도 검색 가능
-        }
-      }}
-    />
-    <IconButton size="large" onClick={handleSearch}>
-      <SearchIcon sx={{ color: 'green' }} />
-    </IconButton>
-  </Box>
-
-  {/* 실시간 검색어 */}
-  <Box
-    sx={{
-      position: { md: 'absolute', lg: 'absolute'},
-      right: 0,
-      top: '0',
-      display: 'flex',
-      flexDirection: 'column',
-       alignItems: { xs: 'center', md: 'flex-end' },
-      width: { xs: '100%', md: 'auto' },
-    }}
-  >
-    <Typography
-      variant="h8"
-      sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center'
-        // ,justifyContent: { xs: 'center', md: 'flex-start' }, 
-      }}
-    >
-      실시간 검색어
-      <IconButton onClick={toggleExpand}>
-        <ArrowDropDownIcon fontSize="large" />
-      </IconButton>
-    </Typography>
-
-    {!isExpanded ? (
-      // 순환 모드
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-        {topSearches[currentRank] && (
-          <>
-            <Typography variant="h8" sx={{ marginRight: '10px', fontWeight: 'bold' }}>
-              {currentRank + 1}위
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'none', color:'black',marginRight: '50px' }}
-              onClick={() => handleSearchFromList(topSearches[currentRank][0])}
-            >
-              {topSearches[currentRank][0]}
-            </Typography>
-          </>
-        )}
-      </Box>
-    ) : (
-      // 전체 목록 보기
-      <TableContainer
-        component={Paper}
+      <Box
         sx={{
-          width: '300px',
-          // width: { xs: '100%', md: '300px' },
-          maxHeight: '300px',
-          overflowY: 'auto',
-          boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-          marginTop: '10px',
-          zIndex:'10'
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: { md: 'center', xs: 'center' },
+          alignItems: 'center',
+          gap: 2,
+          marginBottom: '20px',
+          position: 'relative',
         }}
       >
-        <Table>
-          <TableBody>
-            {topSearches.map(([term, count], index) => (
-              <TableRow key={index}>
-                <TableCell align="center" sx={{ fontWeight: 'bold' }}>
-                  {index + 1}위
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'none', color:'black' }}
-                  onClick={() => handleSearchFromList(term)}
-                >
-                  {term}
-                </TableCell>
-                <TableCell align="center" sx={{ color: 'gray' }}>
-                  {count}회
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    )}
-  </Box>
-</Box>
-<br /><br />
+        {/* 검색창 */}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <TextField
+            variant="outlined"
+            placeholder="검색어를 입력하세요"
+            sx={{ width: { xs: '100%', md: '300px' } }}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch(); // Enter키 눌러도 검색 가능
+              }
+            }}
+          />
+          <IconButton size="large" onClick={handleSearch}>
+            <SearchIcon sx={{ color: 'green' }} />
+          </IconButton>
+        </Box>
+
+        {/* 실시간 검색어 */}
+        <Box
+          sx={{
+            position: { md: 'absolute', lg: 'absolute' },
+            right: 0,
+            top: '0',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: { xs: 'center', md: 'flex-end' },
+            width: { xs: '100%', md: 'auto' },
+          }}
+        >
+          <Typography
+            variant="h8"
+            sx={{
+              fontWeight: 'bold', display: 'flex', alignItems: 'center'
+              // ,justifyContent: { xs: 'center', md: 'flex-start' }, 
+            }}
+          >
+            실시간 검색어
+            <IconButton onClick={toggleExpand}>
+              <ArrowDropDownIcon fontSize="large" />
+            </IconButton>
+          </Typography>
+
+          {!isExpanded ? (
+            // 순환 모드
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+              {topSearches[currentRank] && (
+                <>
+                  <Box
+                    key={currentRank} // 순환 검색어에 고유 key 설정
+                    sx={{
+                      animation: 'slideUp 0.5s ease-in-out', // 애니메이션 적용
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography variant="h8" sx={{ marginRight: '10px', fontWeight: 'bold' }}>
+                      {currentRank + 1}위
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'none', color: 'black', marginRight: '50px' }}
+                      onClick={() => handleSearchFromList(topSearches[currentRank][0])}
+                    >
+                      {topSearches[currentRank][0]}
+                    </Typography>
+                  </Box>
+                </>
+              )}
+            </Box>
+          ) : (
+            // 전체 목록 보기
+            <TableContainer
+              component={Paper}
+              sx={{
+                width: '280px',
+                // width: { xs: '100%', md: '300px' },
+                maxHeight: '300px',
+                overflowY: 'auto',
+                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                marginTop: '10px',
+                zIndex: '10'
+              }}
+            >
+              <Table>
+                <TableBody>
+                  {topSearches.map(([term, count], index) => (
+                    <TableRow key={index}>
+                      <TableCell align="center" sx={{ fontWeight: 'bold' }}>
+                        {index + 1}위
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{ color: 'blue', cursor: 'pointer', textDecoration: 'none', color: 'black' }}
+                        onClick={() => handleSearchFromList(term)}
+                      >
+                        {term}
+                      </TableCell>
+                      <TableCell align="center" sx={{ color: 'gray' }}>
+                        {count}회
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </Box>
+      </Box>
+      <br /><br />
 
       {/* 키워드 태그 */}
       <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', marginBottom: '20px', flexWrap: 'nowrap' }}>
@@ -419,47 +454,57 @@ export default function RegularMeetingPage() {
               sx={{
                 cursor: 'pointer',
                 width: '360px',
-                height: '230px', // 높이를 통일
+                height: '230px',
                 display: 'flex',
                 alignItems: 'center',
                 padding: '16px',
-                backgroundColor: '#F5EEDC',
-                color: '#704C2E',
+                backgroundColor: meeting.liked ? '#ffe5b4' : '#f5eedc',
+                color: meeting.liked ? '#704C2E' : '#595959',
                 boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
                 position: 'relative',  // 하트 아이콘을 절대 위치로 배치
+                borderRadius: '12px', // 둥근 테두리
+                transition: 'background-color 0.3s, transform 0.3s', // 부드러운 전환 효과
                 '&:hover': {
-                  backgroundColor: '#ffa354',
+                  // backgroundColor: '#ffa354',
+                  backgroundColor: meeting.liked ? '#ffd18c' : '#e4d7c5',
+                  transform: 'scale(1.02)', // hover 시 확대 효과
                 },
               }}
             >
               {/* 하트 아이콘 */}
-        <Box
-          onClick={(e) => {
-            e.stopPropagation(); // 카드 클릭 이벤트와 구분
-            toggleLike(meeting.id);
-          }}
-          sx={{
-            position: 'absolute',
-            top: '10px',
-            left: '10px',
-            cursor: 'pointer',
-            zIndex: 10,
-          }}
-        >
-          {meeting.liked ? (
-            <img
-              src="/images/heart-fill-icon.svg"
-              alt="좋아요"
-              style={{ width: '24px', height: '24px' }}
-            />
-          ) : (
-            <img
-              src="/images/heart-icon.svg"
-              alt="좋아요 해제"
-              style={{ width: '24px', height: '24px' }}
-            />
-          )}
-        </Box>
+              <Box
+                onClick={(e) => {
+                  e.stopPropagation(); // 카드 클릭 이벤트와 구분
+                  toggleLike(meeting.id);
+                }}
+                sx={{
+                  position: 'absolute',
+                  top: '10px',
+                  left: '10px',
+                  cursor: 'pointer',
+                  zIndex: 10,
+                  animation: meeting.liked ? 'likeAnimation 0.3s ease-in-out' : 'none', // 클릭 시 애니메이션
+                }}
+              >
+                <img
+                  src={meeting.liked ? '/images/heart-fill-icon.svg' : '/images/heart-icon.svg'}
+                  alt="좋아요"
+                  style={{ width: '25px', height: '25px', }}
+                />
+                {/* {meeting.liked ? (
+                  <img
+                    src="/images/heart-fill-icon.svg"
+                    alt="좋아요"
+                    style={{ width: '24px', height: '24px' }}
+                  />
+                ) : (
+                  <img
+                    src="/images/heart-icon.svg"
+                    alt="좋아요 해제"
+                    style={{ width: '24px', height: '24px' }}
+                  />
+                )} */}
+              </Box>
 
               {/* 모임 이미지 */}
               <Box
