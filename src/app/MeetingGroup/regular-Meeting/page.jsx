@@ -28,7 +28,12 @@ const meetings = [
     members: '25/50',
     image: '/images/photo-3.jpg',
     tags: ['#카라반', '#글램핑', '#산'],
-    liked: false, // 좋아요 상태 추가
+    liked: false, // 좋아요 상태 추가,
+    host: {
+      name: "소경빈",
+      description: "서울숲 산책 모임",
+      profileImage: "/images/tree-1.jpg",
+    },
   },
   {
     id: 2,
@@ -39,7 +44,12 @@ const meetings = [
     members: '14/21',
     image: '/images/tree-3.jpg',
     tags: ['#야영', '#바다', '#산'],
-    liked: false
+    liked: false,
+    host: {
+      name: "박지민",
+      description: "즐거운 캠핑 모임",
+      profileImage: "/images/tree-2.jpg",
+    },
   },
   {
     id: 3,
@@ -109,7 +119,7 @@ export default function RegularMeetingPage() {
 
 
   const handleCardClick = (id) => {
-    router.push(`/MeetingGroup/detail/${id}`);
+    router.push(`/MeetingGroup/regular-Meeting/detail/${id}`);
   };
 
   // 좋아요 상태 로드
@@ -260,7 +270,7 @@ export default function RegularMeetingPage() {
     <Box sx={{ padding: '20px', textAlign: 'center', paddingTop: '80px', margin: '0 auto', width: '70%' }}>
       {/* 페이지 제목 */}
       <Box sx={{ '& > :not(style)': { m: 1 } }}>
-        <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
+        <Typography variant="h4" component="div" gutterBottom sx={{ fontWeight: 'bold', marginBottom: '20px' }}>
           <a href='/MeetingGroup/regular-Meeting' style={{ textDecoration: 'none', color: 'inherit' }}>
             정규모임 &nbsp;
           </a>
@@ -269,6 +279,7 @@ export default function RegularMeetingPage() {
             <AddIcon />
           </Fab>
         </Typography>
+
       </Box>
       <br />
 
@@ -446,7 +457,7 @@ export default function RegularMeetingPage() {
 
       {/* 모임 카드 */}
       <Grid container spacing={3} justifyContent="center">
-        {filteredMeetings.map((meeting) => (
+        {meetings.map((meeting) => (
           <Grid item key={meeting.id}>
             <Paper
               elevation={3}
@@ -491,19 +502,7 @@ export default function RegularMeetingPage() {
                   alt="좋아요"
                   style={{ width: '25px', height: '25px', }}
                 />
-                {/* {meeting.liked ? (
-                  <img
-                    src="/images/heart-fill-icon.svg"
-                    alt="좋아요"
-                    style={{ width: '24px', height: '24px' }}
-                  />
-                ) : (
-                  <img
-                    src="/images/heart-icon.svg"
-                    alt="좋아요 해제"
-                    style={{ width: '24px', height: '24px' }}
-                  />
-                )} */}
+               
               </Box>
 
               {/* 모임 이미지 */}
@@ -521,7 +520,6 @@ export default function RegularMeetingPage() {
                 }}
               />
               {/* 모임 설명 */}
-              {/* <Box sx={{ width: '100%' }}> */}
               <Box
                 sx={{
                   width: 'calc(100% - 146px)', // 이미지 크기 + margin을 제외한 너비 설정

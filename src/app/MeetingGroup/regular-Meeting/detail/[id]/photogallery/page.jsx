@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import "../../globals.css";
+import "../../../../../globals.css";
 
 export default function PhotoGallery() {
   const photos = [
