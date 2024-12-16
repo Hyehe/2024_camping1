@@ -191,10 +191,10 @@ export default function PhotoGallery() {
             }}
           >
             {[
-              { label: "홈", href: "/meet" },
-              { label: "게시판", href: "/meet/bulletinboard" },
-              { label: "사진첩", href: "/meet/photogallery" },
-              { label: "채팅", href: "/meet/chat" },
+              { label: "홈", href: `/MeetingGroup/regular-Meeting/detail/1`},
+              { label: "게시판", href: `/MeetingGroup/regular-Meeting/detail/1/bulletinboard` },
+              { label: "사진첩", href: `/MeetingGroup/regular-Meeting/detail/1/photogallery` },
+              { label: "채팅", href: `/MeetingGroup/regular-Meeting/detail/1/chat` },
             ].map((item) => (
               <Link key={item.label} href={item.href} passHref style={{ textDecoration: "none" }}>
                 <ListItem

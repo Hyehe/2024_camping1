@@ -169,6 +169,8 @@ export default function BulletinBoard() {
           color: "white",
           zIndex: 10,
           "&:hover": { backgroundColor: "#218838" },
+          bottom: "76px",
+          right: "26px",
         }}
       >
         <MenuIcon />
@@ -185,6 +187,8 @@ export default function BulletinBoard() {
           color: "white",
           zIndex: 10,
           "&:hover": { backgroundColor: "#388e3c" },
+          bottom: "26px",
+            right: "26px",
         }}
       >
         <AddCircleIcon />
@@ -231,10 +235,10 @@ export default function BulletinBoard() {
           >
             {/* Drawer 메뉴 링크 */}
             {[
-              { label: "홈", href: "/" },
-              { label: "게시판", href: "/bulletinboard" },
-              { label: "사진첩", href: "/photogallery" },
-              { label: "채팅", href: "/chat" },
+               { label: "홈", href: `/MeetingGroup/regular-Meeting/detail/${posts.id}`},
+               { label: "게시판", href: `/MeetingGroup/regular-Meeting/detail/${posts.id}/bulletinboard` },
+               { label: "사진첩", href: `/MeetingGroup/regular-Meeting/detail/${posts.id}/photogallery` },
+               { label: "채팅", href: `/MeetingGroup/regular-Meeting/detail/${posts.id}/chat` },
             ].map((item) => (
               <Link key={item.label} href={item.href} passHref>
                 <ListItem
