@@ -62,24 +62,6 @@ export default function Home() {
       >
         고객센터
       </Link>
-      <Link
-        href="/meet"
-        sx={{
-          display: 'inline-block',
-          marginTop: '20px',
-          padding: '10px 20px',
-          backgroundColor: '#FF914D',
-          color: 'white',
-          textDecoration: 'none',
-          borderRadius: '5px',
-          fontSize: '16px',
-          '&:hover': {
-            backgroundColor: '#FFB04A',
-          },
-        }}
-      >
-        정규모임 상세
-      </Link>
       
     </Box>
   );
