@@ -147,13 +147,15 @@ export default function MeetPage() {
                 { label: "사진첩", href: `/MeetingGroup/regular-Meeting/detail/${posts.id}/photogallery` },
                 { label: "채팅", href: `/MeetingGroup/regular-Meeting/detail/${posts.id}/chat` },
               ].map((item) => (
-                <Link key={item.label} href={item.href} passHref>
+                <Link key={item.label} href={item.href} passHref legacyBehavior>
+                <a style={{ textDecoration: "none" }}> {/* Link 내 a 태그 명시 */}
                   <ListItem
-                    button
+                    component="div" // 'div'로 렌더링되도록 설정
                     onClick={handleDrawerToggle}
                     sx={{
                       textAlign: "center",
                       "&:hover": { backgroundColor: "#dff0d8" },
+                      cursor: "pointer", // 클릭 가능하게 스타일링
                     }}
                   >
                     <ListItemText
@@ -165,7 +167,8 @@ export default function MeetPage() {
                       }}
                     />
                   </ListItem>
-                </Link>
+                </a>
+              </Link>
               ))}
             </List>
 
